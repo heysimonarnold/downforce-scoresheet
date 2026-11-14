@@ -1,9 +1,9 @@
-import { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, JSX } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import { getCarTheme } from "../../helpers";
 import Gauge from "../gauge/Gauge";
-import styles from "./RangeCarPrice.module.css";
+import styles from "./AuctionCar.module.css";
 import { auctionObj, updateAuction } from "../../Slides/Auction/auctionSlice";
 import AppContext from "../../../store/app-context";
 
@@ -11,7 +11,7 @@ interface AuctionCarProps {
   id: string;
 }
 
-export default function AuctionCar({ id = "" }: AuctionCarProps) {
+export const AuctionCar = ({ id = "" }: AuctionCarProps): JSX.Element => {
   const dispatch = useDispatch();
   const appCtx = useContext(AppContext);
   const auction = useSelector(auctionObj);
@@ -44,7 +44,7 @@ export default function AuctionCar({ id = "" }: AuctionCarProps) {
   return (
     <div
       key={name}
-      className={clsx(styles.rangeCarPrice, price > 0 && "is-active", theme)}
+      className={clsx(styles.auctionCar, price > 0 && "is-active", theme)}
     >
       <div className={styles.wrapper}>
         <label className={styles.label}>
@@ -69,4 +69,4 @@ export default function AuctionCar({ id = "" }: AuctionCarProps) {
       </div>
     </div>
   );
-}
+};

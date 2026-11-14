@@ -3,7 +3,7 @@ import { auctionObj } from "./auctionSlice";
 import { nextSlide } from "../../UI/Wizard/wizardSlice";
 import Slide from "../../UI/slide/Slide";
 import Instructions from "../../UI/instructions/Instructions";
-import RangeCarPrice from "../../UI/range-car-price/RangeCarPrice";
+import { AuctionCar } from "../../UI/auction-car/AuctionCar";
 import { Btn } from "../../UI/btn/Btn";
 import { useContext } from "react";
 import AppContext from "../../../store/app-context";
@@ -28,9 +28,7 @@ export default function SlideAuction({
 
   const handleCompleted = () => dispatch(nextSlide());
 
-  const carItems = cars.map((car: string) => (
-    <RangeCarPrice key={car} id={car} />
-  ));
+  const carItems = cars.map((car: string) => <AuctionCar key={car} id={car} />);
 
   return (
     <Slide

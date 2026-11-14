@@ -28,7 +28,11 @@ export default function RadioImage({
 }: IRadioImage) {
   return (
     <label
-      className={clsx(styles.radioImage, checked && "is-active", className)}
+      className={clsx(
+        styles.radioImage,
+        checked && styles["is-active"],
+        className,
+      )}
     >
       {label ? `${label}` : ""}
       <input type="radio" name={name} value={id} onChange={callback} />

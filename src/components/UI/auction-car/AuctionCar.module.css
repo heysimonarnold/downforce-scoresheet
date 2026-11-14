@@ -1,8 +1,10 @@
-.rangeCarPrice {
+.auctionCar {
+  align-items: center;
+  display: flex;
   flex: 1 1 auto;
+  margin: 0;
   position: relative;
   width: 100%;
-  margin: 0;
 }
 
 .wrapper {
@@ -18,10 +20,10 @@
 
 .checkbox {
   accent-color: var(--color);
-  flex: 0 0 1.5rem;
-  width: 1.5rem;
-  height: 1.5rem;
   cursor: pointer;
+  flex: 0 0 1.5rem;
+  height: 1.5rem;
+  width: 1.5rem;
 }
 
 .label {
