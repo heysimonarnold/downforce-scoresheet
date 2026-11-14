@@ -1,13 +1,14 @@
+import React from "react";
 import { useState, useEffect, createContext } from "react";
 import i18n from "../data/i18n.json";
-import _get from 'lodash/get';
+import _get from "lodash/get";
 
 enum SupportedLanguages {
   en = "en",
   fr = "fr",
   es = "es",
   de = "de",
-};
+}
 
 interface AppContextProps {
   theme: string;
@@ -20,7 +21,7 @@ interface AppContextProps {
 }
 
 const AppContext = createContext({
-  theme: 'Regular',
+  theme: "Regular",
   onToggleTheme: (theme: string) => {},
   lang: "en",
   i18n: i18n,
@@ -30,16 +31,19 @@ const AppContext = createContext({
 } as AppContextProps);
 
 export const getBrowserLang = () => {
-  const lang = (navigator.languages && navigator.languages[0]) || navigator.language;
+  const lang =
+    (navigator.languages && navigator.languages[0]) || navigator.language;
   return lang.substring(0, 2).toLowerCase() ?? "en";
-}
+};
 
 export const AppContextProvider = (props: any) => {
   const [theme, setTheme] = useState<string>("Classic");
   const browserLang = getBrowserLang();
   const defaultLang = browserLang in SupportedLanguages ? browserLang : "en";
   const [lang, setLang] = useState<string>(defaultLang);
-  const [dictionary, setDictionary] = useState<object>(i18n[defaultLang as keyof typeof i18n]);
+  const [dictionary, setDictionary] = useState<object>(
+    i18n[defaultLang as keyof typeof i18n],
+  );
 
   // Initial page load only
   useEffect(() => {
@@ -51,10 +55,16 @@ export const AppContextProvider = (props: any) => {
   }, []);
 
   useEffect(() => {
-    document.title = getTranslationHandler('metaTitle');
-    document.head.querySelector('meta[property="og:title"]')?.setAttribute('content', getTranslationHandler('metaTitle'));
-    document.head.querySelector('meta[property="og:description"]')?.setAttribute('content', getTranslationHandler('metaDescription'));
-    document.head.querySelector('meta[name="description"]')?.setAttribute('content', getTranslationHandler('metaDescription'));
+    document.title = getTranslationHandler("metaTitle");
+    document.head
+      .querySelector('meta[property="og:title"]')
+      ?.setAttribute("content", getTranslationHandler("metaTitle"));
+    document.head
+      .querySelector('meta[property="og:description"]')
+      ?.setAttribute("content", getTranslationHandler("metaDescription"));
+    document.head
+      .querySelector('meta[name="description"]')
+      ?.setAttribute("content", getTranslationHandler("metaDescription"));
   }, [lang]);
 
   const updateLang = (language: string) => {
@@ -66,7 +76,6 @@ export const AppContextProvider = (props: any) => {
   const toggleLangHandler = (language: string) => {
     updateLang(language);
     localStorage.setItem("lang", language);
-    
   };
 
   const getTranslationHandler = (key: string): string => {

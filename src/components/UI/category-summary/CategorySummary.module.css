@@ -1,0 +1,29 @@
+.categorySummary {
+  position: relative;
+  width: 100%;
+}
+
+.title {
+  font-style: italic;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 0.25em var(--spacer);
+  margin: 0;
+}
+
+.table {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 0.75em;
+  font-style: italic;
+  text-transform: uppercase;
+  padding: 0.25em var(--spacer);
+}

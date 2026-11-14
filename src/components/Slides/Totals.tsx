@@ -1,109 +1,172 @@
-import { useState, useEffect, useContext, useMemo } from "react";
-import Slide from "../UI/Slide";
-import MoneyTag from "../UI/MoneyTag";
-import CategorySummary from "../UI/CategorySummary";
-import Btn from "../UI/Btn";
-import { auctionObj } from './Auction/auctionSlice';
-import { betsArr } from './Bets/betsSlice';
-import { finishLineArr } from "./FinishLine/finishLineSlice";
+import { useContext, useMemo } from "react";
 import { useSelector } from "react-redux";
-import AppContext from '../../store/app-context';
-import CarSummary from "../UI/CarSummary";
+import AppContext from "../../store/app-context";
+import { Btn } from "../UI/btn/Btn";
+import { CarSummary } from "../UI/car-summary/CarSummary";
+import { CategorySummary } from "../UI/category-summary/CategorySummary";
+import MoneyTag from "../UI/money-tag/MoneyTag";
+import Slide from "../UI/slide/Slide";
+import { auctionObj } from "./Auction/auctionSlice";
+import { betsArr } from "./Bets/betsSlice";
+import { finishLineArr } from "./FinishLine/finishLineSlice";
+
 interface SlideTotalsProps {
   cars: string[];
   bettingPrizes: number[][];
   restart: () => void;
 }
 
+interface SummaryEntry {
+  key: string;
+  car: string;
+  pos?: number | null;
+  money: number;
+  status?: string | null;
+}
+
+const RACING_PRIZES = [12, 9, 6, 4, 2, 0];
+
 export default function SlideTotals({
-  cars = [],
-  bettingPrizes = [],
+  cars,
+  bettingPrizes,
   restart,
 }: SlideTotalsProps) {
-  const racingPrizes = [12, 9, 6, 4, 2, 0];
-
   const appCtx = useContext(AppContext);
   const auction = useSelector(auctionObj);
   const bets = useSelector(betsArr);
   const finishLine = useSelector(finishLineArr);
-   // @ts-ignore
-  const classifieds:string[] = useMemo(() => finishLine.filter((item) => item !== null), [finishLine]);
-  const abandons = useMemo(() => cars.filter(car => !classifieds.includes(car)), [cars, classifieds]);
-  const finalRanking = useMemo(() => [...classifieds, ...abandons], [classifieds, abandons]);
 
-  let racingTotal = 0;
+  const {
+    racingDetails,
+    racingTotal,
+    bettingDetails,
+    bettingTotal,
+    auctionDetails,
+    auctionTotal,
+  } = useMemo(() => {
+    const classifiedCars = finishLine.filter(
+      (car): car is string => car !== null,
+    );
+    const classifiedSet = new Set(classifiedCars);
+    const finalRanking = [
+      ...classifiedCars,
+      ...cars.filter((car) => !classifiedSet.has(car)),
+    ];
 
-  const racingDetails = finalRanking.map((car, index) => {
-    const abandoned:boolean = index > classifieds.length - 1;
-    let pos:null|number = null;
-    let money:number = 0;
-    let status:string|null = 'abandoned';
+    let racingTotal = 0;
+    const racingDetails: SummaryEntry[] = finalRanking.map((car, index) => {
+      const abandoned = index >= classifiedCars.length;
+      if (abandoned) {
+        return {
+          key: `racing-${car}`,
+          car,
+          pos: null,
+          money: 0,
+          status: "abandoned",
+        };
+      }
 
-    if (!abandoned) {
-      pos = index + 1;
-      money = racingPrizes[index];
-      status = auction[car] > 0 ? 'is-active' : null;
-      racingTotal += auction[car] > 0 ? money : 0;
-    }
+      const money = RACING_PRIZES[index] ?? 0;
+      const isActive = auction[car] > 0;
+      if (isActive) {
+        racingTotal += money;
+      }
 
-    return <CarSummary car={car} pos={pos} money={money} status={status} />
-  });
+      return {
+        key: `racing-${car}`,
+        car,
+        pos: index + 1,
+        money,
+        status: isActive ? "is-active" : null,
+      };
+    });
 
-  let bettingTotal = 0;
+    let bettingTotal = 0;
+    const bettingDetails: SummaryEntry[] = [];
+    bets.forEach((car, index) => {
+      if (car === null) {
+        return;
+      }
 
-  const bettingDetails = bets.map((car, index) => {
-    if (car) {
-      const pos = finishLine.indexOf(car);
-      const amount = bettingPrizes[index][pos];
-      const money = amount ? amount : 0
+      const position = finishLine.indexOf(car);
+      const money = bettingPrizes[index]?.[position] ?? 0;
       bettingTotal += money;
+      bettingDetails.push({
+        key: `bet-${index}`,
+        car,
+        money,
+        status: "is-active",
+      });
+    });
 
-      return <CarSummary car={car} money={money} status="is-active" />
-    }
-    return null;
-  });
+    const auctionEntries = Object.entries(auction);
+    const auctionTotal = auctionEntries.reduce(
+      (total, [, price]) => total - price,
+      0,
+    );
+    const auctionDetails: SummaryEntry[] = auctionEntries.flatMap(
+      ([car, price]) => {
+        if (price <= 0) {
+          return [];
+        }
 
-  const auctionTotal = Object.values(auction).reduce((acc, curr) => acc - curr, 0);
+        return [
+          {
+            key: `auction-${car}`,
+            car,
+            money: -price,
+            status: "is-active",
+          },
+        ];
+      },
+    );
 
-  const auctionDetails = Object.entries(auction).map((item) => {
-    const money = item[1] * -1;
-    if ( money < 0) {
-      return <CarSummary car={item[0]} money={money} status='is-active' />
-    } else {
-      return null;
-    }
-  });
+    return {
+      racingDetails,
+      racingTotal,
+      bettingDetails,
+      bettingTotal,
+      auctionDetails,
+      auctionTotal,
+    };
+  }, [auction, bets, bettingPrizes, cars, finishLine]);
 
   return (
     <Slide
-      body={
-        <>
-          <CategorySummary
-            title={appCtx.getTranslation('racingPayouts')}
-            label={appCtx.getTranslation('racingTotal')}
-            details={racingDetails}
-            total={racingTotal} />
-          
-          <CategorySummary
-            title={appCtx.getTranslation('bettingPayouts')}
-            label={appCtx.getTranslation('bettingTotal')}
-            details={bettingDetails}
-            total={bettingTotal} />
-
-          <CategorySummary
-            title={appCtx.getTranslation('auctionPrice')}
-            label={appCtx.getTranslation('auctionTotal')}
-            details={auctionDetails}
-            total={auctionTotal} />
-        </>
-      }
       footer={
         <>
-          <h3>{appCtx.getTranslation('totalWinning')}</h3>
+          <h3>{appCtx.getTranslation("totalWinning")}</h3>
           <MoneyTag amount={racingTotal + bettingTotal + auctionTotal} />
-          <Btn text={appCtx.getTranslation('restart')} callback={restart} />
+          <Btn text={appCtx.getTranslation("restart")} callback={restart} />
         </>
       }
-    />
+    >
+      <CategorySummary
+        title={appCtx.getTranslation("racingPayouts")}
+        label={appCtx.getTranslation("racingTotal")}
+        details={racingDetails.map(({ key, ...entry }) => (
+          <CarSummary key={key} {...entry} />
+        ))}
+        total={racingTotal}
+      />
+
+      <CategorySummary
+        title={appCtx.getTranslation("bettingPayouts")}
+        label={appCtx.getTranslation("bettingTotal")}
+        details={bettingDetails.map(({ key, ...entry }) => (
+          <CarSummary key={key} {...entry} />
+        ))}
+        total={bettingTotal}
+      />
+
+      <CategorySummary
+        title={appCtx.getTranslation("auctionPrice")}
+        label={appCtx.getTranslation("auctionTotal")}
+        details={auctionDetails.map(({ key, ...entry }) => (
+          <CarSummary key={key} {...entry} />
+        ))}
+        total={auctionTotal}
+      />
+    </Slide>
   );
 }

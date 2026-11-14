@@ -1,0 +1,38 @@
+.radioCar {
+  flex: 1 1 auto;
+  position: relative;
+  display: flex;
+  width: 100%;
+  cursor: pointer;
+
+  input {
+    accent-color: var(--color);
+    flex: 0 0 auto;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .name {
+    flex: 1 1 auto;
+    text-align: center;
+    padding-right: 1.5rem;
+  }
+
+  .wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: var(--stripe-height);
+    padding: 0 1rem;
+  }
+
+  &:hover,
+  &:focus-within,
+  &.isChecked {
+    &::before {
+      opacity: 1;
+    }
+  }
+}

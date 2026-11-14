@@ -1,0 +1,46 @@
+.settingsPanel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(100% + 40px);
+  background-color: var(--blue-light);
+  color: var(--white);
+  padding: 0 var(--spacer) var(--spacer);
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+  z-index: 1;
+
+  &.is-visible {
+    transform: translateY(0);
+  }
+}
+
+.bar {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 40px;
+  background-color: var(--blue-light);
+  color: #fff;
+  margin: 0 0 var(--spacer);
+  padding: 0;
+}
+
+.selectLang {
+  color: currentColor;
+
+  select {
+    display: block;
+    width: 100%;
+    height: 40px;
+    font-size: 1em;
+    font-style: italic;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0.25em 0 0;
+    padding: 0 var(--spacer);
+  }
+}

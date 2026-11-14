@@ -1,23 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit';
-import { IFinishLineItem } from './IFinishLine';
+import { createSlice } from "@reduxjs/toolkit";
+import { IFinishLineItem } from "./types";
 
 const initialFinishLine = [null, null, null, null, null, null];
 
 export const finishLineSlice = createSlice({
-  name: 'finishLine',
-  initialState: initialFinishLine as (null|string)[],
+  name: "finishLine",
+  initialState: initialFinishLine as (null | string)[],
   reducers: {
     updateFinishLine: (state, action: { payload: IFinishLineItem }) => {
-        const tmp = [...state];
-        tmp[action.payload.index] = action.payload.car;
-        return tmp;
+      const tmp = [...state];
+      tmp[action.payload.index] = action.payload.car;
+      return tmp;
     },
     resetFinishLine: () => {
       return initialFinishLine;
-    }
+    },
   },
-})
+});
 
 export const { updateFinishLine, resetFinishLine } = finishLineSlice.actions;
-export const finishLineArr = (state: { finishLine: (string|null)[] } ) => state.finishLine;
+export const finishLineArr = (state: { finishLine: (string | null)[] }) =>
+  state.finishLine;
 export default finishLineSlice.reducer;

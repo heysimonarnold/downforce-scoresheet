@@ -1,8 +1,8 @@
-import { useDispatch } from 'react-redux';
-import { nextSlide } from '../UI/Wizard/wizardSlice';
-import Slide from "../UI/Slide";
-import Instructions from "../UI/Instructions";
-import Btn from "../UI/Btn";
+import { useDispatch } from "react-redux";
+import { nextSlide } from "../UI/Wizard/wizardSlice";
+import Slide from "../UI/slide/Slide";
+import Instructions from "../UI/instructions/Instructions";
+import { Btn } from "../UI/btn/Btn";
 
 interface SlideRaceProps {
   instructions?: string;
@@ -16,17 +16,13 @@ export default function SlideRace({
   const dispatch = useDispatch();
 
   return (
-    <Slide
-      body={
-        <>
-          <Instructions text={instructions} />
-          <Btn
-            text={btnText}
-            theme="yellow"
-            callback={() => dispatch(nextSlide())}
-          />
-        </>
-      }
-    />
+    <Slide>
+      <Instructions text={instructions} />
+      <Btn
+        text={btnText}
+        theme="yellow"
+        callback={() => dispatch(nextSlide())}
+      />
+    </Slide>
   );
 }

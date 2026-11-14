@@ -1,0 +1,14 @@
+.wizard {
+  align-items: center;
+  display: grid;
+  flex: 1 1 auto;
+  grid-auto-rows: 1fr;
+  height: 100%;
+  left: 0;
+  position: relative;
+  transition: transform 0.3s;
+
+  &.slider-title {
+    height: 100%;
+  }
+}

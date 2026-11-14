@@ -1,20 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { nextSlide } from '../../UI/Wizard/wizardSlice';
-import Slide from "../../UI/Slide";
-import SelectCarPosition from "../../UI/SelectCarPosition";
-import Instructions from "../../UI/Instructions";
-import Btn from "../../UI/Btn";
+import { useDispatch, useSelector } from "react-redux";
+import { nextSlide } from "../../UI/Wizard/wizardSlice";
+import Slide from "../../UI/slide/Slide";
+import SelectCarPosition from "../../UI/select-car-position/SelectCarPosition";
+import Instructions from "../../UI/instructions/Instructions";
+import { Btn } from "../../UI/btn/Btn";
 import { finishLineArr } from "./finishLineSlice";
-import { useContext } from 'react';
-import AppContext from '../../../store/app-context';
+import { useContext } from "react";
+import AppContext from "../../../store/app-context";
 
 interface SlideFinishLineProps {
   cars: string[];
 }
 
-function SlideFinishLine({
-  cars = [],
-}: SlideFinishLineProps) {
+export default function SlideFinishLine({ cars = [] }: SlideFinishLineProps) {
   const dispatch = useDispatch();
   const appCtx = useContext(AppContext);
   const finishLine = useSelector(finishLineArr);
@@ -23,20 +21,11 @@ function SlideFinishLine({
 
   const handleCompleted = () => dispatch(nextSlide());
 
-  const carsSelectArr = cars.map((car, index) => {
-    return (
-      <SelectCarPosition
-        key={car}
-        cars={cars}
-        index={index}
-      />
-    );
-  });
-
   return (
     <Slide
-      header={<Instructions text={appCtx.getTranslation("finishlineInstructions")} />}
-      body={carsSelectArr}
+      header={
+        <Instructions text={appCtx.getTranslation("finishlineInstructions")} />
+      }
       footer={
         <Btn
           text={appCtx.getTranslation("finishlineBtn")}
@@ -44,8 +33,10 @@ function SlideFinishLine({
           callback={handleCompleted}
         />
       }
-    />
+    >
+      {cars.map((car, index) => (
+        <SelectCarPosition key={car} cars={cars} index={index} />
+      ))}
+    </Slide>
   );
 }
-
-export default SlideFinishLine;

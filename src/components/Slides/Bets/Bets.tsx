@@ -1,29 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
-import styled from "styled-components";
-import { ISlideBetProps } from './IBets';
-import { nextSlide } from '../../UI/Wizard/wizardSlice';
-import Slide from "../../UI/Slide";
-import Instructions from "../../UI/Instructions";
-import RadioCar from "../../UI/RadioCar";
-import BettingPayouts from "../../UI/BettingPayouts";
-import Btn from "../../UI/Btn";
-import { betsArr } from './betsSlice';
-import { useContext } from 'react';
-import AppContext from '../../../store/app-context';
-
-const StyledBets = styled.figure`
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
-
-  .betting-options {
-    flex: 1 1 auto;
-    display: flex;
-    flex-direction: column;
-  }
-`;
+import { useDispatch, useSelector } from "react-redux";
+import styles from "./Bets.module.css";
+import { ISlideBetProps } from "./types";
+import { nextSlide } from "../../UI/Wizard/wizardSlice";
+import Slide from "../../UI/slide/Slide";
+import Instructions from "../../UI/instructions/Instructions";
+import RadioCar from "../../UI/radio-car/RadioCar";
+import BettingPayouts from "../../UI/betting-payout/BettingPayouts";
+import { Btn } from "../../UI/btn/Btn";
+import { betsArr } from "./betsSlice";
+import { useContext } from "react";
+import AppContext from "../../../store/app-context";
 
 function SlideBet({
   betIndex = 1,
@@ -40,26 +26,13 @@ function SlideBet({
 
   const carItems = cars.map((car: string) => {
     return (
-      <RadioCar
-        key={car}
-        id={car}
-        index={betIndex}
-        currentBet={actualBet}
-      />
+      <RadioCar key={car} id={car} index={betIndex} currentBet={actualBet} />
     );
   });
 
   return (
     <Slide
       header={<Instructions text={appCtx.getTranslation("betInstructions")} />}
-      body={
-        <StyledBets>
-          <div className="betting-options">
-            {carItems}
-          </div>
-          <BettingPayouts arr={bettingPrizes} title={appCtx.getTranslation("bettingPayouts")} />
-        </StyledBets>
-      }
       footer={
         <Btn
           text={appCtx.getTranslation("letsRace")}
@@ -67,7 +40,15 @@ function SlideBet({
           disabled={btnIsDisabled}
         />
       }
-    />
+    >
+      <div className={styles.bets}>
+        <div className={styles.bettingOptions}>{carItems}</div>
+        <BettingPayouts
+          arr={bettingPrizes}
+          title={appCtx.getTranslation("bettingPayouts")}
+        />
+      </div>
+    </Slide>
   );
 }
 

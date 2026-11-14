@@ -1,0 +1,15 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0.5em 2em rgba(46, 58, 90, 0.5);
+  padding: var(--spacer) 0 0;
+}
+
+.mainContent {
+  flex: 1 1 auto;
+  position: relative;
+}

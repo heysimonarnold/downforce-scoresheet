@@ -1,0 +1,114 @@
+@import "./vars.css";
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100dvh;
+  margin: 0;
+  width: 100dvw;
+}
+
+body {
+  align-items: center;
+  background-color: var(--blue-medium);
+  display: flex;
+  font-family: sans-serif;
+  font-size: clamp(14px, 4dvw, 18px);
+  justify-content: center;
+  overflow: hidden;
+}
+
+h1,
+h2,
+h3 {
+  font-style: italic;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+#root {
+  position: relative;
+  width: 100%;
+  min-width: 360px;
+  max-width: 500px;
+}
+
+@media (max-width: 500px) and (orientation: portrait) {
+  #root,
+  .App {
+    height: 100%;
+  }
+}
+
+.car-theme {
+  color: var(--text);
+  font-style: italic;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+
+  &::before {
+    content: "";
+    position: absolute;
+    background-color: var(--color);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.35;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  &:hover,
+  &:focus-within {
+    &::before {
+      opacity: 0.7;
+    }
+  }
+
+  &.is-active {
+    &::before {
+      opacity: 1;
+    }
+
+    &:hover,
+    &:focus-within {
+      &::before {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.car-theme--black {
+  --color: var(--theme-black);
+  --text: white;
+}
+
+.car-theme--blue {
+  --color: var(--theme-blue);
+  --text: white;
+}
+
+.car-theme--green {
+  --color: var(--theme-green);
+  --text: white;
+}
+
+.car-theme--orange {
+  --color: var(--theme-orange);
+  --text: var(--black);
+}
+
+.car-theme--red {
+  --color: var(--theme-red);
+  --text: white;
+}
+
+.car-theme--yellow {
+  --color: var(--theme-yellow);
+  --text: var(--black);
+}

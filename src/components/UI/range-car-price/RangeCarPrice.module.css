@@ -1,0 +1,42 @@
+.rangeCarPrice {
+  flex: 1 1 auto;
+  position: relative;
+  width: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  height: 100%;
+  min-height: var(--stripe-height);
+  padding: 0 1rem 0 1rem;
+  position: relative;
+  width: 100%;
+}
+
+.checkbox {
+  accent-color: var(--color);
+  flex: 0 0 1.5rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  cursor: pointer;
+}
+
+.label {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  flex: 0 0 42%;
+  font-size: 0.9rem;
+}
+
+.name {
+  flex-grow: 1;
+  font-style: italic;
+  font-weight: bold;
+  padding: 0 var(--spacer);
+  text-align: center;
+  text-transform: uppercase;
+}
