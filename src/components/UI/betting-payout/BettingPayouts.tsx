@@ -1,10 +1,12 @@
 import { formatMoney } from "../../helpers";
-import { useContext } from "react";
+import { Fragment, useContext } from "react";
 import AppContext from "../../../store/app-context";
 import styles from "./BettingPayouts.module.css";
+import F from "lodash/fp/F";
+import MoneyTag from "../money-tag/MoneyTag";
 
 interface BettingPayoutsProps {
-  arr: any[];
+  arr: number[];
   title: string;
 }
 
@@ -16,19 +18,20 @@ export default function BettingPayouts({
 
   return (
     <div className={styles.bettingPayouts}>
-      <h3 className={styles.title}>{title}</h3>
-      <table>
-        <tbody>
-          {arr.map((value: number, index: number) => (
-            <tr key={value}>
-              <td className={styles.pos}>
-                {appCtx.getTranslation(`position${index + 1}`)}
-              </td>
-              <td className={styles.price}>{formatMoney(value)}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className={styles.table}>
+        <div className={styles.cell}>
+          <h3 className={styles.title}>{title}</h3>
+        </div>
+        {arr.map((value, index) => (
+          <div className={styles.cell} key={index}>
+            <span className={styles.pos}>
+              {appCtx.getTranslation(`position${index + 1}`)}
+            </span>
+            <br />
+            <MoneyTag className={styles.price} amount={value} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

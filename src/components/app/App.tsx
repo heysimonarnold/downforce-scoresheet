@@ -1,4 +1,4 @@
-import { type ReactElement, useState, useContext, useMemo } from "react";
+import { useCallback, useContext, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { goToSlide } from "../UI/Wizard/wizardSlice";
 import data from "../../data/downforce.json";
@@ -17,84 +17,77 @@ import { resetAuction } from "../Slides/Auction/auctionSlice";
 import { resetBets } from "../Slides/Bets/betsSlice";
 import { resetFinishLine } from "../Slides/FinishLine/finishLineSlice";
 
+const CARS = ["black", "blue", "green", "orange", "red", "yellow"];
+const BETTING_PRIZES = [
+  [9, 6, 3],
+  [6, 4, 2],
+  [3, 2, 1],
+];
+
 export default function App() {
   const appCtx = useContext(AppContext);
   const dispatch = useDispatch();
-  const cars = ["black", "blue", "green", "orange", "red", "yellow"];
-  const bettingPrizes = [
-    [9, 6, 3],
-    [6, 4, 2],
-    [3, 2, 1],
-  ];
-  let betIndex = -1;
-  const [slides, setSlides] = useState<(ReactElement | null)[]>([]);
   const [settingsVisible, setSettingsVisible] = useState<boolean>(false);
 
-  useMemo(() => {
-    const slidesTmp: (ReactElement | null)[] = data.map(
-      (slide: any, index: number) => {
-        const key = `slide-${index}`;
-        const slideInstructions = appCtx.getTranslation(
-          `${slide.id}Instructions`,
-        )
-          ? appCtx.getTranslation(`${slide.id}Instructions`)
-          : "";
-        let slideBtn = appCtx.getTranslation(`${slide.id}Btn`)
-          ? appCtx.getTranslation(`${slide.id}Btn`)
-          : "";
-
-        switch (slide.type) {
-          case "auction":
-            return (
-              <SlideAuction
-                key={key}
-                instructions={slideInstructions}
-                cars={cars}
-              />
-            );
-          case "race":
-            return (
-              <SlideRace
-                key={key}
-                instructions={slideInstructions}
-                btnText={slideBtn}
-              />
-            );
-          case "bet":
-            betIndex++;
-            return (
-              <SlideBet
-                key={key}
-                cars={cars}
-                bettingPrizes={bettingPrizes[betIndex]}
-                betIndex={betIndex}
-              />
-            );
-          case "finishline":
-            return <SlideFinishLine key={key} cars={cars} />;
-          case "totals":
-            return (
-              <SlideTotals
-                key={key}
-                cars={cars}
-                bettingPrizes={bettingPrizes}
-                restart={restart}
-              />
-            );
-          default:
-            return null;
-        }
-      },
-    );
-    setSlides(slidesTmp);
-  }, [appCtx]);
-
-  function restart() {
+  const restart = useCallback(() => {
     dispatch(resetAuction());
     dispatch(resetBets());
     dispatch(resetFinishLine());
     dispatch(goToSlide(0));
-  }
+  }, [dispatch]);
+
+  const slides = useMemo(() => {
+    let betIndex = 0;
+
+    return data.map((slide) => {
+      const instructions =
+        appCtx.getTranslation(`${slide.id}Instructions`) || "";
+      const buttonText = appCtx.getTranslation(`${slide.id}Btn`) || "";
+
+      switch (slide.type) {
+        case "auction":
+          return (
+            <SlideAuction
+              key={slide.id}
+              instructions={instructions}
+              cars={CARS}
+            />
+          );
+        case "race":
+          return (
+            <SlideRace
+              key={slide.id}
+              instructions={instructions}
+              btnText={buttonText}
+            />
+          );
+        case "bet": {
+          const currentBetIndex = betIndex++;
+          return (
+            <SlideBet
+              key={slide.id}
+              cars={CARS}
+              bettingPrizes={BETTING_PRIZES[currentBetIndex]}
+              betIndex={currentBetIndex}
+            />
+          );
+        }
+        case "finishline":
+          return <SlideFinishLine key={slide.id} cars={CARS} />;
+        case "totals":
+          return (
+            <SlideTotals
+              key={slide.id}
+              cars={CARS}
+              bettingPrizes={BETTING_PRIZES}
+              restart={restart}
+            />
+          );
+        default:
+          return null;
+      }
+    });
+  }, [appCtx, restart]);
 
   return (
     <div className={styles.app}>

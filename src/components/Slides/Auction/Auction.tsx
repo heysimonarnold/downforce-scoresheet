@@ -10,7 +10,7 @@ import AppContext from "../../../store/app-context";
 
 interface SlideAuctionProps {
   instructions?: string;
-  cars: any[];
+  cars: string[];
 }
 
 export default function SlideAuction({

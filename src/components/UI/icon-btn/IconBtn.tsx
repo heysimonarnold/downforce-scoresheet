@@ -1,7 +1,8 @@
+import type { ComponentType, SVGProps } from "react";
 import styles from "./IconBtn.module.css";
 
 interface IIconBtn {
-  Icon: any;
+  Icon: ComponentType<SVGProps<SVGSVGElement>>;
   callback: () => void;
 }
 

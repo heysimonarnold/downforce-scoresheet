@@ -2,12 +2,12 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 40px;
-  height: 40px;
+  width: 2.5rem;
+  height: 2.5rem;
   background: transparent;
   border: none;
   color: currentColor;
-  padding: 0 10px;
+  padding: 0 0.5rem;
   transition: background-color 0.15s ease-in-out;
   cursor: pointer;
 
@@ -16,7 +16,8 @@
     fill: currentColor;
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     background-color: rgba(0, 0, 0, 0.1);
   }
 }

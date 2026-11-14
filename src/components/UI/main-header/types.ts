@@ -1,4 +1,4 @@
 export interface MainHeaderProps {
-  data: any[];
+  data: { id: string }[];
   openSettings: () => void;
 }

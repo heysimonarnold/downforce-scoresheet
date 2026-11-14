@@ -21,7 +21,7 @@
     align-items: center;
     justify-content: center;
     min-height: var(--strip-height);
-    padding: 0.5em 0;
+    padding: 0.5rem 0;
   }
 
   .pos {
@@ -40,14 +40,14 @@
       opacity: 0.35;
     }
 
-    &.is-active {
+    &.isActive {
       &::before {
         opacity: 1;
       }
     }
   }
 
-  &.is-active {
+  &.isActive {
     &::after {
       display: none;
     }

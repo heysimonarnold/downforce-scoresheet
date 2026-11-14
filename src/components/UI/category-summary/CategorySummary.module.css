@@ -1,13 +1,14 @@
 .categorySummary {
   position: relative;
   width: 100%;
+  padding-top: 1rem;
 }
 
 .title {
   font-style: italic;
   font-weight: bold;
   text-transform: uppercase;
-  padding: 0.25em var(--spacer);
+  padding: 0.25rem 1rem;
   margin: 0;
 }
 
@@ -25,5 +26,5 @@
   font-size: 0.75em;
   font-style: italic;
   text-transform: uppercase;
-  padding: 0.25em var(--spacer);
+  padding: 0.5rem 1rem;
 }
