@@ -35,21 +35,29 @@
     text-align: center;
   }
 
-  &:hover {
-    &::before {
-      opacity: 0.35;
-    }
-
-    &.isActive {
+  &:not(.isActive) {
+    &:hover,
+    &:focus {
       &::before {
-        opacity: 1;
+        opacity: 0.35;
       }
     }
   }
 
   &.isActive {
+    &::before {
+      opacity: 1;
+    }
+
     &::after {
       display: none;
+    }
+
+    &:hover,
+    &:focus-within {
+      &::before {
+        opacity: 1;
+      }
     }
   }
 

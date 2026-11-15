@@ -19,9 +19,7 @@ export const AuctionCar = ({ id = "" }: AuctionCarProps): JSX.Element => {
   const [price, setPrice] = useState(auction[id]);
   const theme = getCarTheme(id);
 
-  useEffect(() => {
-    setPrice(auction[id]);
-  }, [auction, id]);
+  useEffect(() => setPrice(auction[id]), [auction, id]);
 
   useEffect(() => {
     /* Wait that the user stop changing the price before calling onBidChange */

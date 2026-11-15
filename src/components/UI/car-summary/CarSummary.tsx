@@ -17,7 +17,7 @@ export const CarSummary = ({
 
   return (
     <div
-      className={`${styles.carModule} ${theme} ${status !== null && styles[status]}`}
+      className={`${styles.carModule} ${theme} ${status !== null && status !== undefined && styles[status]}`}
     >
       <div className={styles.wrapper}>
         {name && (
