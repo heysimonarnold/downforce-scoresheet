@@ -41,26 +41,31 @@ export default function SelectCarPosition({
   }
 
   return (
-    <label className={clsx(styles.selectCarPosition, theme, "is-active")}>
-      <div className={styles.wrapper}>
-        <span className={styles.position}>
-          {appCtx.getTranslation(`position${index + 1}`)}
-        </span>
-        <select
-          value={carTheme}
-          onChange={(event) => handleChangeCar(event.target.value)}
-        >
-          <option key="default" value="">
-            {appCtx.getTranslation("noCar")}
-          </option>
+    <label
+      htmlFor={`pos${index + 1}`}
+      className={clsx(styles.selectCarPosition, theme, "is-active")}
+    >
+      {/* <div className={styles.wrapper}> */}
+      <span className={styles.position}>
+        {appCtx.getTranslation(`position${index + 1}`)}
+      </span>
+      <select
+        name={`pos${index + 1}`}
+        id={`pos${index + 1}`}
+        value={carTheme}
+        onChange={(event) => handleChangeCar(event.target.value)}
+      >
+        <option key="default" value="">
+          {appCtx.getTranslation("noCar")}
+        </option>
 
-          {carsNotRanked.map((car) => (
-            <option key={car} value={car}>
-              {appCtx.getTranslation(`car${appCtx.theme}[${car}]`)}
-            </option>
-          ))}
-        </select>
-      </div>
+        {carsNotRanked.map((car) => (
+          <option key={car} value={car}>
+            {appCtx.getTranslation(`car${appCtx.theme}[${car}]`)}
+          </option>
+        ))}
+      </select>
+      {/* </div> */}
     </label>
   );
 }
